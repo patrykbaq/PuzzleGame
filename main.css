@@ -1,0 +1,91 @@
+body
+{
+    background-color: #2f3336;
+	font-family: 'Open Sans', sans-serif;
+	color: #ddd;
+}
+
+h1
+{
+    text-align: center;
+    text-transform: uppercase;  
+    margin-top: 0px;
+    margin-bottom: 0px;
+    letter-spacing: 5px;
+    font-weight: bold;
+}
+
+#game
+{
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center; 
+}
+
+#board
+{
+    width: 600px;
+    height: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 2px solid #1d1d1d;
+    border-radius: 2px;
+    position: relative;
+}
+
+#menu
+{
+    margin-top: 150px;
+}
+
+button
+{
+    width: 200px;
+    font-size: 20px;
+    color: #fff;
+    background-color: #0e80d1;
+    border: none;
+    border-radius: 5px;
+    letter-spacing: 3px;
+    padding: 10px 10px;
+    cursor: pointer;
+    opacity: 0.7;
+    display: block;
+    margin: 25px auto 25px auto;
+    
+}
+
+button:hover
+{
+    background-color: #219bf3;
+}
+
+#reset
+{
+    margin: 0 auto 0 auto;
+    text-transform: uppercase;
+}
+
+#score
+{
+	font-size: 20px;
+	text-transform: uppercase;
+	margin-top: 10px;
+}
+
+.component
+{
+    background-image: url("img/obraz.png");
+    position: absolute;
+    opacity: 0.8;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.component:hover
+{
+    cursor: pointer;
+    opacity: 1;
+}
