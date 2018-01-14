@@ -2,24 +2,26 @@ var game = {};
 
 game.board = $("#board");
 game.boardSize = $("#board").width();
-game.resetButton = $("#reset");
-game.score = $("#score");
-game.counter = 0; //ilość wykonanych ruchów
-game.componentSize = 0; //wielkość jednego elementu
-game.tabPosition = []; //pozycje wszystkich elementów
-game.lastIndex = 0; //index do pustego elementu
-game.emptyTop = 0;
+game.menuButton = $("#menuButton");
+game.image = 'url("img/obraz.png")';
+game.counter = 0; //the number of moves
+game.componentSize = 0; //the size of one component
+game.tabPosition = []; //positions of all elements
+game.lastIndex = 0; //index to an empty component
+game.emptyTop = 0; //the position of the empty component
 game.emptyLeft = 0;
+game.difficulty = 0; //level of difficulty of the game (easy: 3, medium: 4, hard: 5)
+game.timeAnimation = 400; // 400ms
 game.start = false; 
 
 game.startMenu = function()
 {
-    this.resetButton.css({'display': 'none'});
-    this.score.css({'display': 'none'});
     this.board.empty();
-    this.board.css({'background-image': 'url("img/obraz.png")'});
+    this.board.css({'background-image': game.image});
     this.board.append("<div id=\"menu\"></div>");
+    this.menuButton.css({'display': 'none'});
     var menu = $("#menu");
+    menu.append("<div id=\"title\">Puzzle Game</div>")
     menu.append("<button class=\"level\" difficulty=\"3\">Easy</button>");
     menu.append("<button class=\"level\" difficulty=\"4\">Medium</button>");
     menu.append("<button class=\"level\" difficulty=\"5\">Hard</button>");
@@ -33,16 +35,15 @@ game.startGame = function(difficulty)
 {
     this.start = true;
     this.counter = 0;
-    this.resetButton.css({'display': 'block'});
-    this.score.css({'display': 'block'});
-    this.score.empty();
     this.board.empty();
     this.board.css({'background-image': 'none'});
+    this.menuButton.fadeIn(1500);
     this.componentSize = Math.floor(this.boardSize/difficulty);
+    this.difficulty = difficulty;
     this.lastIndex = difficulty*difficulty-1;
     var index = 0;
 
-    //ustawienie pozycji elementów gry
+    //Setting the position of game components.
     for(var i=0; i<difficulty; i++)
     {   
         for(var j=0; j<difficulty; j++)
@@ -62,12 +63,12 @@ game.startGame = function(difficulty)
             index++;
         }
     }
-
-    //Przypisanie wartości pustego elemntu
+	
+    //Assigning an empty component value.
     this.emptyTop = this.tabPosition[this.lastIndex].top;
     this.emptyLeft = this.tabPosition[this.lastIndex].left;
 
-    //wymieszanie elemntów gry
+    //Mixing the components of the game.
     for(var i=0; i<1000; i++)
     {
         var number = Math.floor(Math.random()*this.lastIndex);
@@ -78,10 +79,10 @@ game.startGame = function(difficulty)
 
     $(".component").click(function(){
         game.checkComponent($(this));
-        setTimeout("game.checkWin()", 500); 
+        setTimeout("game.checkWin()", game.timeAnimation + 50); 
     });
 
-    this.resetButton.click(function(){
+    this.menuButton.click(function(){
         game.startMenu();
     });
 }
@@ -89,10 +90,18 @@ game.startGame = function(difficulty)
 game.endGame = function()
 {
     this.board.empty();
-    this.board.css({'background-image': 'url("img/obraz.png")'});
+    this.board.css({'background-image': game.image});
+    this.board.append("<div id=\"reload\"><i class=\"icon-cw\"></i></div>");
+    this.board.append("<div id=\"score\">Number of moves: " +this.counter+ "</div>");
+    $("#reload").fadeIn(1000);
+    $("#score").fadeIn(1000);
+
+    $("#reload").click(function(){
+        game.startGame(game.difficulty);
+    });
 }
 
-//sprawdzenie czy kliknięty element styka się ze ścianą pustego elmentu
+//Checking if the clicked element touches the wall of an empty component.
 game.checkComponent = function(component)
 {
     var componentPosition = component.position();
@@ -115,12 +124,11 @@ game.checkComponent = function(component)
     }
 }
 
-//zamiana miejscami elementów
+//Replacement empty component with current component.
 game.switchComponents = function(component, componentPosition)
 {
     if(this.start)
     {
-
         component.css({
             'top': this.emptyTop,
             'left': this.emptyLeft
@@ -131,17 +139,16 @@ game.switchComponents = function(component, componentPosition)
         component.animate({
             top: this.emptyTop,
             left: this.emptyLeft
-        }, 500);
+        }, game.timeAnimation);
 
         this.counter++;
-        this.score.html("Turn counter: " + this.counter);
     } 
 
     this.emptyTop = componentPosition.top;
     this.emptyLeft = componentPosition.left;
 }
 
-//sprawdzenie czy elementy znajdują się w początkowej pozycji
+//Checking if the components are in the initial position.
 game.checkWin= function()
 {
     for(var i = 0; i<this.lastIndex; i++)
@@ -156,6 +163,5 @@ game.checkWin= function()
 }
 
 $(document).ready(function(){
-
     game.startMenu();
 });
