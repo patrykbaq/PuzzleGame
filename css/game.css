@@ -79,7 +79,7 @@ body
 
 .component
 {
-    background-image: url("img/obraz.png");
+    background-image: url("../img/obraz.png");
     position: absolute;
     opacity: 0.8;
     transition: opacity 0.3s ease-in-out;
